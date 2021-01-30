@@ -21,11 +21,12 @@ using cs225::PNG;
  *
  * @return The grayscale image.
  */
-PNG grayscale(PNG image) {
+PNG grayscale(PNG image) 
+{
   /// This function is already written for you so you can see how to
   /// interact with our PNG class.
-  for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.height(); y++) {
+  for (unsigned int x = 0; x < image.width(); x++) {
+    for (unsigned int y = 0; y < image.height(); y++) {
       HSLAPixel & pixel = image.getPixel(x, y);
 
       // `pixel` is a pointer to the memory stored inside of the PNG `image`,
@@ -60,10 +61,24 @@ PNG grayscale(PNG image) {
  *
  * @return The image with a spotlight.
  */
-PNG createSpotlight(PNG image, int centerX, int centerY) {
-
-  return image;
-  
+PNG createSpotlight(PNG image, int centerX, int centerY) 
+{
+  double dist;
+  for (unsigned int x = 0; x < image.width(); x++) 
+  {
+      for (unsigned int y = 0; y < image.height(); y++) 
+      {
+        dist = sqrt((x-centerX)*(x-centerX)+(y-centerY)*(y-centerY));
+        HSLAPixel & pixel = image.getPixel(x, y);
+        if(dist >= 160)
+        {
+          pixel.l = 0.2 * pixel.l;
+        }
+        else
+          pixel.l = pixel.l * (1.0 - dist * 0.005);
+      }
+  }
+  return image;  
 }
  
 
@@ -77,7 +92,24 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  *
  * @return The illinify'd image.
 **/
-PNG illinify(PNG image) {
+PNG illinify(PNG image) 
+{
+
+  for (unsigned int x = 0; x < image.width(); x++) 
+  {
+      for (unsigned int y = 0; y < image.height(); y++) 
+      {
+        HSLAPixel & pixel = image.getPixel(x, y);
+        if(pixel.h > 113.5 && pixel.h < 293.5)
+        {
+          pixel.h = 216;
+        }
+        else
+        {
+          pixel.h = 11;
+        }
+      }
+  }
 
   return image;
 }
@@ -95,7 +127,37 @@ PNG illinify(PNG image) {
 *
 * @return The watermarked image.
 */
-PNG watermark(PNG firstImage, PNG secondImage) {
+
+PNG watermark(PNG firstImage, PNG secondImage) 
+{
+  unsigned int commonWidth = secondImage.width();
+  if (firstImage.width() < secondImage.width())
+  {
+    commonWidth = firstImage.width();
+  }
+  
+  unsigned int commonHeight = secondImage.height();
+  if (firstImage.height() < secondImage.height())
+  {
+    commonHeight= firstImage.height();
+  }
+  
+  for (unsigned int x = 0; x < commonWidth; x++) 
+  {
+      for (unsigned int y = 0; y < commonHeight; y++) 
+      {
+        HSLAPixel & pixel1 = firstImage.getPixel(x, y);
+        HSLAPixel & pixel2 = secondImage.getPixel(x, y);
+        if(pixel2.l == 1.0)
+        {
+          pixel1.l+=0.2;
+          if(pixel1.l > 1)
+          {
+            pixel1.l = 1;
+          }
+        }
+      }
+  }
 
   return firstImage;
 }
