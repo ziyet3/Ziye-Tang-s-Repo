@@ -139,3 +139,71 @@ TEST_CASE("Image scale(0.5) scales pixel data in a reasonable way", "[weight=1][
   REQUIRE( result.getPixel(100, 20).h > 180 );
   REQUIRE( result.getPixel(100, 20).h < 220 );
 }
+
+TEST_CASE("Image scale(10000, 200) results in the correct width/height") {
+  Image img = createRainbowImage();
+  
+  Image result = createRainbowImage();
+  result.scale(10000, 200);
+
+  REQUIRE( img.width() * 2 == result.width() );
+}
+
+TEST_CASE("Image scale(720, 10000) results in the correct width/height") {
+  Image img = createRainbowImage();
+  
+  Image result = createRainbowImage();
+  result.scale(720, 10000);
+
+  REQUIRE( img.height() * 2 == result.height() );
+}
+
+TEST_CASE("Image scale(240, 50) results in the correct width/height") {
+  Image img = createRainbowImage();
+  
+  Image result = createRainbowImage();
+  result.scale(240, 50);
+
+  REQUIRE( img.width() * 0.5 == result.width() );
+}
+
+TEST_CASE("Image scale(180, 80) results in the correct width/height") {
+  Image img = createRainbowImage();
+  
+  Image result = createRainbowImage();
+  result.scale(180, 80);
+
+  REQUIRE( img.height() * 0.5 == result.height() );
+}
+
+TEST_CASE("Image scale(10000, 200) scales pixel data in a reasonable way") {
+  Image img = createRainbowImage();
+  
+  Image result = createRainbowImage();
+  result.scale(10000, 200);
+
+  REQUIRE( result.getPixel(100, 100).h > 40 );
+  REQUIRE( result.getPixel(100, 100).h < 60 );
+}
+
+
+TEST_CASE("Image scale(240, 50) scales pixel data in a reasonable way") {
+  Image img = createRainbowImage();
+  
+  Image result = createRainbowImage();
+  result.scale(240, 50);
+
+  REQUIRE( result.getPixel(100, 20).h > 180 );
+  //REQUIRE( result.getPixel(100, 100).h < 60 );
+}
+
+TEST_CASE("Image scale(180, 80) scales pixel data in a reasonable way") {
+  Image img = createRainbowImage();
+  
+  Image result = createRainbowImage();
+  result.scale(180, 80);
+
+  REQUIRE( result.getPixel(100, 20).h > 180 );
+  //REQUIRE( result.getPixel(100, 100).h < 60 );
+}
+

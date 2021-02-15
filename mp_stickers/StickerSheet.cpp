@@ -82,8 +82,7 @@ int StickerSheet::addSticker (Image &sticker, unsigned x, unsigned y)
         (stk.end()-1)->x=x;
         (stk.end()-1)->y=y;
         (stk.end()-1)->index=stk.size()-1;
-        (stk.end()-1)->img=new Image(sticker);
-
+        (stk.end()-1)->img=new Image(sticker);        
         return stk.size()-1;
     }
     return -1;

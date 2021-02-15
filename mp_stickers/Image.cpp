@@ -221,23 +221,12 @@ void Image::scale(double factor)
 
 void Image::scale(unsigned w, unsigned h)
 {
-    unsigned factorw = w/width();
-    unsigned factorh = h/height();
-    Image other(w,h);
-    for(unsigned int i=0;i<width();i++)
-    {
-        for(unsigned int j=0;j<height();j++)
-        {
-            cs225::HSLAPixel currentPixel=getPixel(i,j);
-            for(unsigned int k=i*factorw;k<i*factorw+factorw;k++)
-            {
-                for(unsigned int z=j*factorh;z<j*factorh+factorh;z++)
-                {
-                    if(k<other.width() && z<other.height())
-                        other.getPixel(k,z)=currentPixel;
-                }
-            }
-        }
-    }
-    *this=other;
+    double factorw = (double)w/(double)width();
+    double factorh = (double)h/(double)height();
+    double minFactor;
+    if(factorw>factorh)
+        minFactor=factorh;
+    else
+        minFactor=factorw;
+    scale(minFactor);
 }
