@@ -10,16 +10,16 @@ void StickerSheet::clear()
 {
     for(auto i=stk.begin();i!=stk.end();i++)
     {
-        if((*i).img!=NULL)
+        if((*i).img!=nullptr)
         {
             delete i->img;
-            (*i).img=NULL;
+            (*i).img=nullptr;
         }
     }
-    if(baseImg!=NULL)
+    if(baseImg!=nullptr)
     {
         delete baseImg;
-        baseImg=NULL;
+        baseImg=nullptr;
     }
 }       
     
@@ -113,10 +113,10 @@ void StickerSheet::removeSticker (unsigned index)
                 j->x=(j+1)->x;
                 j->y=(j+1)->y;
                 //j->index=(j+1)->index;
-                if(j->img!=NULL)
+                if(j->img!=nullptr)
                 {
                     delete j->img;
-                    j->img=NULL;
+                    j->img=nullptr;
                 }
                 j->img=new Image(*((j+1)->img));
             }
