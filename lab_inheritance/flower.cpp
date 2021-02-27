@@ -71,6 +71,25 @@ void Flower::drawPetals(PNG* canvas, const Vector2& center, int x, int y) const
     petal.draw(canvas);
 }
 
+Flower::~Flower()
+{
+    if(stem!=nullptr)
+    {
+        delete stem;
+        stem=nullptr;
+    }
+    if(pistil!=nullptr)
+    {
+        delete pistil;
+        pistil=nullptr;
+    }
+    if(leaf!=nullptr)
+    {
+        delete leaf;
+        leaf=nullptr;
+    }
+}
+
 void Flower::draw(PNG* canvas) const
 {
     
