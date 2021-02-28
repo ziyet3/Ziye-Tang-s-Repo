@@ -256,6 +256,7 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint)
 
 }
 
+
 template <typename T>
 typename List<T>::ListNode* List<T>::nodeAt(int idx,typename List<T>::ListNode* startPoint)
 {
@@ -347,40 +348,42 @@ void List<T>::mergeWith(List<T> & otherList)
  * @return The starting node of the resulting, sorted sequence.
  */
 template <typename T>
-typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
+typename List<T>::ListNode * List<T>::merge(ListNode* first, ListNode* second) 
 {
   /// @todo Graded in MP3.2
   ListNode* itr1=first;
   ListNode* itr2=second;
-  ListNode* res; 
-  ListNode* resHead;
+  ListNode* res=NULL; 
+  ListNode* resHead=NULL;
   
   while(itr1!=NULL||itr2!=NULL)
   {
     ListNode* toInsert;
     if(itr1==NULL)
     {
-      toInsert = new ListNode(itr2->data);
+      toInsert = itr2;
       itr2=itr2->next;
     }
     else if(itr2==NULL)
     {
-      toInsert = new ListNode(itr1->data);
+      toInsert = itr1;
       itr1=itr1->next;
     }
     else if(itr1->data<itr2->data)
     {
-      toInsert = new ListNode(itr1->data);
+      toInsert = itr1;
       itr1=itr1->next;
     }
     else
     {
-      toInsert = new ListNode(itr2->data);
+      toInsert = itr2;
       itr2=itr2->next;
     }
 
-
-    if(res==NULL)
+    toInsert->next=NULL;
+    toInsert->prev=NULL;
+     
+    if(resHead==NULL)
     {
       res = toInsert;
       resHead = toInsert;
@@ -408,7 +411,23 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second)
  * @return A pointer to the beginning of the now sorted chain.
  */
 template <typename T>
-typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
+typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) 
+{
   /// @todo Graded in MP3.2
-  return NULL;
+  if(chainLength<=1||start==NULL)
+    return start;
+  
+  ListNode* first=start;
+  ListNode* firstHead=start;
+  for(int i=0;i<chainLength/2-1;i++)
+  {
+    first=first->next;
+  }
+  ListNode* secondHead=first->next;
+  first->next=NULL;
+  secondHead->prev=NULL;
+  firstHead=mergesort(firstHead, chainLength/2);
+  secondHead=mergesort(secondHead, chainLength-chainLength/2);
+  ListNode* res=merge(firstHead, secondHead);
+  return res;
 }
