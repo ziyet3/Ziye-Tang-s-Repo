@@ -67,7 +67,7 @@ TEST_CASE("List::triplerotate basic", "[weight=5][part=1][valgrind]") {
 TEST_CASE("List::triplerotate simple", "[weight=10][part=1][valgrind]") {
     List<int> list;
 
-    for (int i = 1; i <= 6; i++)
+    for (int i = 1; i <= 7; i++)
         list.insertBack(i);
 
     list.tripleRotate();
@@ -76,7 +76,7 @@ TEST_CASE("List::triplerotate simple", "[weight=10][part=1][valgrind]") {
 
     list.print(s);
 
-    REQUIRE("< 2 3 1 5 6 4 >" == s.str());
+    REQUIRE("< 2 3 1 5 6 4 7 >" == s.str());
 }
 
 TEST_CASE("List::split simple", "[weight=5][part=1][valgrind]") {
@@ -87,17 +87,18 @@ TEST_CASE("List::split simple", "[weight=5][part=1][valgrind]") {
     list.insertBack(3);
     list.insertBack(4);
 
-    List<int> slist = list.split(2);
+    List<int> slist = list.split(4);
     stringstream s1, s2;
 
     list.print(s1);
     slist.print(s2);
 
-    REQUIRE( "< 1 2 >" == s1.str() );
-    REQUIRE( "< 3 4 >" == s2.str() );
+    REQUIRE( "< 1 2 3 4 >" == s1.str() );
+    REQUIRE( "< >" == s2.str() );
 }
 
-TEST_CASE("List::split images", "[weight=5][part=1]") {
+TEST_CASE("List::split images", "[weight=5][part=1]") 
+{
 
     PNG in;         in.readFromFile("tests/split.png");
     PNG expected_1; expected_1.readFromFile("tests/expected-split_1.png");
@@ -229,7 +230,8 @@ TEST_CASE("List::ListIterator::operator-- (post-increment) returns an un-increme
     REQUIRE( *seven == 7 );
 }
 
-TEST_CASE("List::ListIterator::end is reached", "[weight=1][part=1][valgrind]") {
+TEST_CASE("List::ListIterator::end is reached", "[weight=1][part=1][valgrind]") 
+{
     List<unsigned> list;
     list.insertFront(1);
     list.insertFront(2);

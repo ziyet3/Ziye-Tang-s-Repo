@@ -18,14 +18,16 @@ using namespace std;
  * and are encouraged to add to it.
  */
 template <class T>
-class List {
+class List 
+{
   private:
     /**
      * The ListNode class is private to the List class via the principle of
      * encapsulation---the end user does not need to know our node-based
      * implementation details.
      */
-    class ListNode {
+    class ListNode 
+    {
       public:
         /**
          * Default ListNode constructor.
@@ -59,6 +61,8 @@ class List {
          */
         const T data;
     };
+
+
 
   public:
     /**
@@ -233,6 +237,8 @@ class List {
      * You must use these as specified in the spec and may not rename them.
      * You may place more here as you need them.
      */
+
+    typename List<T>::ListNode* nodeAt(int idx,  typename List<T>::ListNode* startPoint);
 
     /**
      * Copies the given list into the current list.
