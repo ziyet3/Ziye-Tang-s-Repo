@@ -75,7 +75,8 @@ List<T>::~List() {
  * @return The second list created from the split.
  */
 template <typename T>
-List<T> List<T>::split(int splitPoint) {
+List<T> List<T>::split(int splitPoint) 
+{
     if (splitPoint > length_)
         return List<T>();
 
@@ -114,7 +115,8 @@ List<T> List<T>::split(int splitPoint) {
  * Sorts the current list by applying the Mergesort algorithm.
  */
 template <typename T>
-void List<T>::sort() {
+void List<T>::sort() 
+{
     if (empty())
         return;
     head_ = mergesort(head_, length_);
@@ -124,7 +126,8 @@ void List<T>::sort() {
 }
 
 template <class T>
-void List<T>::print(ostream& os) const {
+void List<T>::print(ostream& os) const 
+{
     os << "<";
     ListNode* curr = head_;
     while (curr != NULL) {
