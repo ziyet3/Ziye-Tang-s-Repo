@@ -255,13 +255,13 @@ HuffmanTree::TreeNode* HuffmanTree::readTree(BinaryFileReader& bfile)
         TreeNode* node;
         if(bfile.getNextBit())
         {
-            Frequency* f = new Frequency(bfile.getNextByte(),0);
-            node=new TreeNode(*f);
+            Frequency f(bfile.getNextByte(),0);
+            node=new TreeNode(f);
         }
         else
         {
-            Frequency* f = new Frequency(0);
-            node=new TreeNode(*f);
+            Frequency f(0);
+            node=new TreeNode(f);
             node->left=readTree(bfile);
             node->right=readTree(bfile);
         }
