@@ -7,7 +7,8 @@
  * Point constructor. Initializes everything to 0.
  */
 template <int Dim>
-Point<Dim>::Point() {
+Point<Dim>::Point() 
+{
     for (int i = 0; i < Dim; ++i)
         vals[i] = 0;
 }
@@ -27,7 +28,8 @@ Point<Dim>::Point(double arr[Dim]) {
  * Point constructor with mines, used for grading.
  */
 template <int Dim>
-Point<Dim>::Point(double arr[Dim], bool isMine, const MineAction * mineAction) : Point<Dim>(arr) {
+Point<Dim>::Point(double arr[Dim], bool isMine, const MineAction * mineAction) : Point<Dim>(arr) 
+{
   isMine_ = isMine;
   mineAction_ = mineAction;
 }
