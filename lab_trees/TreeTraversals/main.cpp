@@ -23,11 +23,11 @@ int main() {
     }
     cout<<endl;
 
-    InorderTraversal<int> iot(myTree.getRoot());
+    /*InorderTraversal<int> iot(myTree.getRoot());
     cout<<"Inorder Traversal:  ";
     for (TreeTraversal<int>::Iterator it = iot.begin(); it != iot.end(); ++it) {
         cout<<(*it)->elem<<" ";
     }
-    cout<<endl;
+    cout<<endl;*/
 
 }

@@ -75,10 +75,28 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
  * Flips the tree over a vertical axis, modifying the tree itself
  *  (not creating a flipped copy).
  */
-    template <typename T>
+template <typename T>
 void BinaryTree<T>::mirror()
 {
     //your code here
+    mirror(root);
+}
+
+template <typename T>
+void BinaryTree<T>::mirror(Node* subRoot)
+{
+    if(subRoot==NULL)
+        return;
+    if(subRoot->left==NULL && subRoot->right==NULL)
+        return;
+    else
+    {
+        Node* temp=subRoot->left;
+        subRoot->left=subRoot->right;
+        subRoot->right=temp;
+        mirror(subRoot->left);
+        mirror(subRoot->right);
+    }
 }
 
 
@@ -92,7 +110,21 @@ template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
     // your code here
-    return false;
+    std::vector<T> nodes;
+    InorderTraversal<T> t(root);
+    for(typename TreeTraversal<T>::Iterator it = t.begin(); it!=t.end(); ++it)
+    {
+        nodes.push_back((*it)->elem);
+    }
+    for(size_t i=0; i<nodes.size()-1; ++i)
+    {
+        for(size_t j = i+1; j<nodes.size(); ++j)
+        {
+            if(nodes[i]>nodes[j])
+                return false;
+        }
+    }
+    return true;
 }
 
 /**
@@ -104,7 +136,66 @@ bool BinaryTree<T>::isOrderedIterative() const
 template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
-    // your code here
-    return false;
+    // your code here    
+    return isOrderedRecursive(root);
 }
 
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursive(Node* subRoot) const
+{
+    if(subRoot==NULL)
+        return true;
+    if(subRoot->left==NULL && subRoot->right==NULL)
+        return true;
+    if(subRoot->left==NULL)
+    {
+        if(subRoot->right->elem < subRoot->elem)
+            return false;
+        return isOrderedRecursive(subRoot->right) && findSmallest(subRoot->right) > subRoot->elem;
+    }
+    if(subRoot->right==NULL)
+    {
+        if(subRoot->left->elem > subRoot->elem)
+            return false;
+        return isOrderedRecursive(subRoot->left) && findLargest(subRoot->left) < subRoot->elem;
+    }
+    
+    if(subRoot->right->elem < subRoot->elem || subRoot->left->elem > subRoot->elem)
+        return false;
+    bool f1 = isOrderedRecursive(subRoot->left) && isOrderedRecursive(subRoot->right);
+    bool f2 = findSmallest(subRoot->right) > subRoot->elem && findLargest(subRoot->left) < subRoot->elem;
+    return f1 && f2;
+}
+
+
+
+template <typename T>
+T BinaryTree<T>::findSmallest(const Node* subRoot) const
+{
+    T currentMin = subRoot->elem;
+    if(subRoot->left!=NULL)
+    {
+        currentMin  = std::min(currentMin,findSmallest(subRoot->left));
+    }
+    if(subRoot->right!=NULL)
+    {
+        currentMin = std::min(currentMin, findSmallest(subRoot->right));
+    }
+    return currentMin;
+}
+
+
+template <typename T>
+T BinaryTree<T>::findLargest(const Node* subRoot) const
+{
+    T currentMax = subRoot->elem;
+    if(subRoot->left!=NULL)
+    {
+        currentMax = std::max(currentMax,findLargest(subRoot->left));
+    }
+    if(subRoot->right!=NULL)
+    {
+        currentMax = std::max(currentMax, findLargest(subRoot->right));
+    }
+    return currentMax;
+}

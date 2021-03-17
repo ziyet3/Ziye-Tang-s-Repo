@@ -51,7 +51,8 @@ class TreeTraversal {
                  */
                 Iterator & operator++() 
                 {
-                    if (!traversal->empty()) {
+                    if (!traversal->empty()) 
+                    {
                         current = traversal->pop();			
                         traversal->add(current);
                         current = traversal->peek();

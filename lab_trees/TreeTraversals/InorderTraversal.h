@@ -13,7 +13,8 @@
  * and a given root node.
  */
 template <typename T>
-class InorderTraversal : public TreeTraversal<T> {
+class InorderTraversal : public TreeTraversal<T> 
+{
   public: 
     /**
      * Initializes a Inorder TreeTraversal of a tree,
@@ -25,8 +26,14 @@ class InorderTraversal : public TreeTraversal<T> {
     InorderTraversal(typename BinaryTree<T>::Node* root)
 	    : root(root)
     {
-      stack.push(root);	
+      stack.push(root);
       // your code here
+      typename BinaryTree<T>::Node* cur=root->left;
+      while(cur!=NULL)
+      {
+        stack.push(cur);
+        cur=cur->left;
+      }
     }
 
     /**
@@ -61,6 +68,12 @@ class InorderTraversal : public TreeTraversal<T> {
      */	
     void add(typename BinaryTree<T>::Node *& treeNode) {
       // your code here
+      typename BinaryTree<T>::Node* cur=treeNode->right;
+      while(cur!=NULL)
+      {
+        stack.push(cur);
+        cur=cur->left;
+      }
       return;	
     }
 
