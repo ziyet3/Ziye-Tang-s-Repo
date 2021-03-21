@@ -159,6 +159,7 @@ class KDTree
      * @param other The KDTree to copy.
      */
     KDTree(const KDTree<Dim>& other);
+    void KDTreeCopyHelper(const KDTreeNode*& otherNode, KDTreeNode*& rt);
 
     /**
      * Assignment operator for KDTree.
@@ -172,6 +173,7 @@ class KDTree
      * Destructor for KDTree.
      */
     ~KDTree();
+    void destroy(KDTreeNode*& rt);
 
     /**
      * Finds the closest point to the parameter point in the KDTree.

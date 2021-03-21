@@ -140,12 +140,32 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
     KDTreeBuildHelper(newPoints,root,0);
 }
 
+
+template <int Dim>
+void KDTree<Dim>::KDTreeCopyHelper(const KDTreeNode*& otherNode, KDTreeNode*& rt)
+{
+  /**
+   * @todo Implement this function!
+   */
+  if(otherNode!=NULL)
+  {
+    rt=new KDTreeNode(otherNode->point);
+    KDTreeCopyHelper(otherNode->left, rt->left);
+    KDTreeCopyHelper(otherNode->right, rt->right);
+  }
+}
+
+
+
+
 template <int Dim>
 KDTree<Dim>::KDTree(const KDTree<Dim>& other) 
 {
   /**
    * @todo Implement this function!
    */
+  size=other.size;
+  KDTreeCopyHelper(other.root, root);
 }
 
 template <int Dim>
@@ -153,15 +173,40 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   /**
    * @todo Implement this function!
    */
-
+  KDTreeCopyHelper(rhs.root, root);
   return *this;
 }
 
+
 template <int Dim>
-KDTree<Dim>::~KDTree() {
+void KDTree<Dim>::destroy(KDTreeNode*& rt)
+{  
+  if(rt!=NULL)
+  {
+    if(rt->left!=NULL)
+    {
+      KDTreeNode*& l = rt->left;
+      destroy(l);
+    }
+    if(rt->right!=NULL)
+    {
+      KDTreeNode*& r = rt->right;
+      destroy(r);
+    }
+    delete rt;
+    rt=NULL;    
+  }
+}
+
+
+
+template <int Dim>
+KDTree<Dim>::~KDTree() 
+{
   /**
    * @todo Implement this function!
    */
+  destroy(root);
 }
 
 template <int Dim>
