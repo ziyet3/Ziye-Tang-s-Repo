@@ -27,7 +27,7 @@ int main(int argc, const char** argv) {
     string tileDir = "/class/cs225/mp_mosaic_uiuc-ig/";
     string numTilesStr = "100";
     string pixelsPerTileStr = "50";
-    string outFile = "mymosaic.png";
+    string outFile = "mosaic.png";
 
     OptionsParser optsparse;
     optsparse.addArg(inFile);

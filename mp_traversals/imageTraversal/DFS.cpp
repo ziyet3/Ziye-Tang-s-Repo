@@ -22,14 +22,19 @@
  * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
  * it will not be included in this DFS
  */
-DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
+DFS::DFS(const PNG & png, const Point & start, double tolerance) 
+{  
   /** @todo [Part 1] */
+  png_=new PNG(png);
+  start_=new Point(start.x, start.y);
+  tolerance_=tolerance;
 }
 
 /**
  * Returns an iterator for the traversal starting at the first point.
  */
-ImageTraversal::Iterator DFS::begin() {
+ImageTraversal::Iterator DFS::begin() 
+{
   /** @todo [Part 1] */
   return ImageTraversal::Iterator();
 }
@@ -37,7 +42,8 @@ ImageTraversal::Iterator DFS::begin() {
 /**
  * Returns an iterator for the traversal one past the end of the traversal.
  */
-ImageTraversal::Iterator DFS::end() {
+ImageTraversal::Iterator DFS::end() 
+{
   /** @todo [Part 1] */
   return ImageTraversal::Iterator();
 }
@@ -45,8 +51,10 @@ ImageTraversal::Iterator DFS::end() {
 /**
  * Adds a Point for the traversal to visit at some point in the future.
  */
-void DFS::add(const Point & point) {
+void DFS::add(const Point & point) 
+{
   /** @todo [Part 1] */
+  
 }
 
 /**
@@ -60,7 +68,8 @@ Point DFS::pop() {
 /**
  * Returns the current Point in the traversal.
  */
-Point DFS::peek() const {
+Point DFS::peek() const 
+{
   /** @todo [Part 1] */
   return Point(0, 0);
 }
@@ -68,7 +77,8 @@ Point DFS::peek() const {
 /**
  * Returns true if the traversal is empty.
  */
-bool DFS::empty() const {
+bool DFS::empty() const 
+{
   /** @todo [Part 1] */
   return true;
 }

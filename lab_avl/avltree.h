@@ -146,6 +146,9 @@ class AVLTree
      */
     void remove(Node*& node, const K& key);
 
+    Node*& find_right(Node*& node);
+    Node*& find_left(Node*& node);
+
     /**
      * Finds a value (by key) in the AVL tree.
      * @param node The node to search from (current subroot)
