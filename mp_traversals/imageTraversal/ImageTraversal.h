@@ -2,14 +2,14 @@
  * @file ImageTraversal.h
  */
 #pragma once
-
+#include <queue>
 #include <iterator>
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
 
 using namespace cs225;
-
+using namespace std;
 /**
  * A base class for traversal algorithms on images.
  *
@@ -29,7 +29,7 @@ public:
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     Iterator();
-
+    Iterator(ImageTraversal* traversal, Point start);
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
@@ -40,7 +40,9 @@ public:
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
-
+    ImageTraversal* traversal;
+    Point current;
+    Point start;
   };
 
   /**
@@ -76,6 +78,10 @@ public:
    */
   virtual bool empty() const = 0;
 
+  bool withinTol(double tolerance, const HSLAPixel & p1, const HSLAPixel & p2);
+  bool** visited;
+  PNG png;
+  double tolerance;
 private:
-  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
+  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);
 };

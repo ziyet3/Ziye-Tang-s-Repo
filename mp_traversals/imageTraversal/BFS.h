@@ -35,4 +35,6 @@ public:
 private:
   /** @todo [Part 1] */
   /** add private members here*/
+  Point start;
+  queue<Point> toVisit;
 };

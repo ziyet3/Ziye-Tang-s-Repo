@@ -22,6 +22,7 @@ using namespace cs225;
  */
 class DFS : public ImageTraversal {
 public:
+  
   DFS(const PNG & png, const Point & start, double tolerance);
 
   ImageTraversal::Iterator begin();
@@ -35,7 +36,8 @@ public:
 private:
 	/** @todo [Part 1] */
 	/** add private members here*/
-  PNG* png_;
-  Point* start_;
-  double tolerance_;
+  
+  Point start;
+  stack<Point> toVisit;
+  
 };

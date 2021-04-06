@@ -14,7 +14,6 @@
 struct Point {
   unsigned x;
   unsigned y;
-
   /**
    * Default constructor, set the point to (0, 0)
    */
@@ -24,7 +23,7 @@ struct Point {
    * @param x coordinate of a point
    * @param y coordinate of a point
    */
-  Point(unsigned x, unsigned y) : x(x), y(y) { }
+  Point(unsigned x, unsigned y) : x(x), y(y){ }
 
   /**
    * overload operator <

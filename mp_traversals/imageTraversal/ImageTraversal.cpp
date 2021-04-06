@@ -28,11 +28,26 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
   return sqrt( (h*h) + (s*s) + (l*l) );
 }
 
+bool ImageTraversal::withinTol(double tolerance,const HSLAPixel & p1, const HSLAPixel & p2)
+{
+  return calculateDelta(p1,p2)<tolerance;
+}
+
+
 /**
  * Default iterator constructor.
  */
-ImageTraversal::Iterator::Iterator() {
+ImageTraversal::Iterator::Iterator() 
+{
   /** @todo [Part 1] */
+  traversal=NULL;
+}
+
+ImageTraversal::Iterator::Iterator(ImageTraversal* traversal, Point start)
+{
+  this->start=start;
+  this->traversal=traversal;
+  current=start;
 }
 
 /**
@@ -40,8 +55,50 @@ ImageTraversal::Iterator::Iterator() {
  *
  * Advances the traversal of the image.
  */
-ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
+ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() 
+{
   /** @todo [Part 1] */
+  if(!traversal->empty()) 
+  {
+    current = traversal->pop();			
+    unsigned x=current.x;
+    unsigned y=current.y;
+    PNG png=traversal->png;
+    double tolerance=traversal->tolerance;
+    if((x+1) <png.width())
+    {
+      if(!traversal->visited[x+1][y]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x+1,y)))
+      {
+        traversal->add(Point(x+1,y));
+      }
+    }
+    if((y+1) <png.height())
+    {
+      if(!traversal->visited[x][y+1]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x,y+1)))
+      {
+        traversal->add(Point(x,y+1));
+      }
+    }
+    if((x-1)>=0)
+    {
+      if(!traversal->visited[x-1][y]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x-1,y)))
+      {
+        traversal->add(Point(x-1,y));
+      }
+    }
+    if((y-1)>=0)
+    {
+      if(!traversal->visited[x][y-1]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x,y-1)))
+      {
+        traversal->add(Point(x,y-1));
+      }
+    }
+    traversal->visited[x][y]=true;
+  }	
+  else 
+  {
+    traversal=NULL;
+  }
   return *this;
 }
 
@@ -52,7 +109,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  return current;
 }
 
 /**
@@ -60,8 +117,18 @@ Point ImageTraversal::Iterator::operator*() {
  *
  * Determines if two iterators are not equal.
  */
-bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
+bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) 
+{
   /** @todo [Part 1] */
-  return false;
+  bool thisEmpty = false; 
+  bool otherEmpty = false;
+
+  if (traversal == NULL) { thisEmpty = true; }
+  if (other.traversal == NULL) { otherEmpty = true; }
+  if (!thisEmpty)  { thisEmpty = traversal->empty(); }
+  if (!otherEmpty) { otherEmpty = other.traversal->empty(); }
+  if (thisEmpty && otherEmpty) return false; 
+  else if ((!thisEmpty)&&(!otherEmpty)) return (traversal != other.traversal); 
+  else return true; 
 }
 
