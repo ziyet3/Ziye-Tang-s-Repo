@@ -134,8 +134,9 @@ TEST_CASE("test_build_heap_1", "[valgrind][weight=1]")
 	vector<int> test;
 	myHeap.getElems(test);
 	vector<int> expected = {1, 2, 3};
-	bool matches = (test == expected);
-	REQUIRE(matches == true);
+	//bool matches = (test == expected);
+	//REQUIRE(matches == true);
+    REQUIRE(test == expected);
 }
 
 TEST_CASE("test_build_heap_2", "[valgrind][weight=1]")

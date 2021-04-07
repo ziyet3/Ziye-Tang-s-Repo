@@ -112,6 +112,7 @@ class heap
      * write the helper functions according to that choice.
      */
     std::vector<T> _elems;
+    size_t size;
 
     /**
      * Comparison functor. This functor takes two parameters and returns true
