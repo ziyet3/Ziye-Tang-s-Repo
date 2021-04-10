@@ -18,6 +18,7 @@ using namespace cs225;
  */
 FloodFilledImage::FloodFilledImage(const PNG & png) {
   /** @todo [Part 2] */
+  this->png=png;
 }
 
 /**
@@ -27,8 +28,13 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  * @param traversal ImageTraversal used for this FloodFill operation.
  * @param colorPicker ColorPicker used for this FloodFill operation.
  */
-void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
+void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) 
+{
   /** @todo [Part 2] */
+  
+  traversals.push_back(&traversal);
+  pickers.push_back(&colorPicker);
+  
 }
 
 /**
@@ -50,8 +56,32 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
  *   - ...
  *   - The final frame, after all pixels have been filed)
  */ 
-Animation FloodFilledImage::animate(unsigned frameInterval) const {
+Animation FloodFilledImage::animate(unsigned frameInterval) const 
+{
   Animation animation;
+  PNG tempPng;
   /** @todo [Part 2] */
+  ImageTraversal* traversal;
+  ColorPicker* picker;
+  int count;
+  
+  for(size_t i=0;i<traversals.size();i++)
+  {
+    tempPng=png;
+    traversal=traversals[i];
+    picker=pickers[i];
+    count=0;
+    for(ImageTraversal::Iterator it = traversal->begin(); it!=traversal->end(); ++it)
+    {
+      if(count%frameInterval==0)
+      {
+        animation.addFrame(tempPng);
+      }
+      Point current=*it;
+      tempPng.getPixel(current.x,current.y)=picker->getColor(current.x,current.y);
+      count++;
+    }
+    animation.addFrame(tempPng);
+  }
   return animation;
 }

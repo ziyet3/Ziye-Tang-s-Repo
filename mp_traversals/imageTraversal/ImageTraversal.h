@@ -4,6 +4,7 @@
 #pragma once
 #include <queue>
 #include <iterator>
+#include <vector>
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
@@ -28,6 +29,7 @@ public:
    */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
+    ~Iterator();
     Iterator();
     Iterator(ImageTraversal* traversal, Point start);
     Iterator & operator++();
@@ -79,7 +81,8 @@ public:
   virtual bool empty() const = 0;
 
   bool withinTol(double tolerance, const HSLAPixel & p1, const HSLAPixel & p2);
-  bool** visited;
+  //bool** visited;
+  vector<vector<bool>> visited;
   PNG png;
   double tolerance;
 private:

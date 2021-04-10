@@ -33,6 +33,14 @@ bool ImageTraversal::withinTol(double tolerance,const HSLAPixel & p1, const HSLA
   return calculateDelta(p1,p2)<tolerance;
 }
 
+ImageTraversal::Iterator::~Iterator()
+{
+  if(traversal!=NULL)
+  {
+    /*delete traversal;*/
+    traversal=NULL;
+  }
+} 
 
 /**
  * Default iterator constructor.
@@ -42,6 +50,7 @@ ImageTraversal::Iterator::Iterator()
   /** @todo [Part 1] */
   traversal=NULL;
 }
+
 
 ImageTraversal::Iterator::Iterator(ImageTraversal* traversal, Point start)
 {
@@ -60,40 +69,40 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++()
   /** @todo [Part 1] */
   if(!traversal->empty()) 
   {
-    current = traversal->pop();			
-    unsigned x=current.x;
-    unsigned y=current.y;
-    PNG png=traversal->png;
+    Point toAdd = traversal->pop();			
+    unsigned x=toAdd.x;
+    unsigned y=toAdd.y;
     double tolerance=traversal->tolerance;
-    if((x+1) <png.width())
+
+    if((x+1)>=0&& (x+1) <traversal->png.width())
     {
-      if(!traversal->visited[x+1][y]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x+1,y)))
-      {
-        traversal->add(Point(x+1,y));
-      }
+      traversal->add(Point(x+1,y));
     }
-    if((y+1) <png.height())
+    if((y+1)>=0&&(y+1) <traversal->png.height())
     {
-      if(!traversal->visited[x][y+1]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x,y+1)))
-      {
-        traversal->add(Point(x,y+1));
-      }
+      traversal->add(Point(x,y+1));
     }
-    if((x-1)>=0)
+    if((x-1)>=0&&(x-1) <traversal->png.width())
     {
-      if(!traversal->visited[x-1][y]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x-1,y)))
-      {
-        traversal->add(Point(x-1,y));
-      }
+      traversal->add(Point(x-1,y));
     }
-    if((y-1)>=0)
+    if((y-1)>=0&&(y-1) <traversal->png.height())
     {
-      if(!traversal->visited[x][y-1]&&traversal->withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x,y-1)))
-      {
-        traversal->add(Point(x,y-1));
-      }
+      traversal->add(Point(x,y-1));
     }
-    traversal->visited[x][y]=true;
+
+    Point temp=traversal->peek();
+    unsigned x2=temp.x;
+    unsigned y2=temp.y;
+    while(!traversal->empty() && (traversal->visited[x2][y2]||!traversal->withinTol(tolerance,traversal->png.getPixel(x2,y2),traversal->png.getPixel(start.x,start.y))))
+    {
+      traversal->pop();
+      temp=traversal->peek();
+      x2=temp.x;
+      y2=temp.y;
+    }
+    current=temp;
+    traversal->visited[current.x][current.y]=true;
   }	
   else 
   {

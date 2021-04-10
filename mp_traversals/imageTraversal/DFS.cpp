@@ -12,7 +12,7 @@
 #include "ImageTraversal.h"
 #include "DFS.h"
 
-
+using namespace std;
 /**
  * Initializes a depth-first ImageTraversal on a given `png` image,
  * starting at `start`, and with a given `tolerance`.
@@ -26,18 +26,19 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance)
 {  
   /** @todo [Part 1] */
   this->png=png;
-  visited=new bool*[png.width()];
-  for(unsigned int i=0;i<png.width();i++)
+  for(size_t i=0;i<png.width();i++)
   {
-    visited[i]=new bool[png.height()];
-    for(unsigned int j=0;j<png.height();j++)
+    vector<bool> v;
+    for(size_t j=0;j<png.height();j++)
     {
-      visited[i][j]=false;
+      v.push_back(false);
     }
+    visited.push_back(v);
   }
   this->start=start;
   this->tolerance=tolerance;
   toVisit.push(start);
+  visited[start.x][start.y]=true;
 }
 
 /**
@@ -46,40 +47,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance)
 ImageTraversal::Iterator DFS::begin() 
 {
   /** @todo [Part 1] */
-  ImageTraversal::Iterator it(this,start);
-  pop();
-  unsigned x=start.x;
-  unsigned y=start.y;
-  if((x+1) <png.width())
-  {
-    if(!visited[x+1][y]&&withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x+1,y)))
-    {
-      add(Point(x+1,y));
-    }
-  }
-  if((y+1) <png.height())
-  {
-    if(!visited[x][y+1]&&withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x,y+1)))
-    {
-      add(Point(x,y+1));
-    }
-  }
-  if((x-1)>=0)
-  {
-    if(!visited[x-1][y]&&withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x-1,y)))
-    {
-      add(Point(x-1,y));
-    }
-  }
-  if((y-1)>=0)
-  {
-    if(!visited[x][y-1]&&withinTol(tolerance,png.getPixel(start.x,start.y),png.getPixel(x,y-1)))
-    {
-      add(Point(x,y-1));
-    }
-  }
-  visited[x][y]=true;
-  return it;
+  return ImageTraversal::Iterator(this,start);
 }
 
 /**

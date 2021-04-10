@@ -26,7 +26,22 @@ int main() {
   lastFrame.writeToFile("myFloodFill.png");
   animation.write("myFloodFill.gif");
   */
+  PNG png;      
+  png.readFromFile("tests/pacman.png");
+  
+  FloodFilledImage image(png);
+  BFS bfs(png, Point(png.width()/2, png.height()/2), 0.5);
+  DFS dfs(png, Point(png.width()/2, png.height()/2), 0.2);
+  MyColorPicker mine(Point(png.width()/2, png.height()/2),40,50,0);
+  image.addFloodFill( bfs, mine);
+  image.addFloodFill( dfs, mine);
 
+  Animation animation = image.animate(1000);
+
+  PNG lastFrame = animation.getFrame( animation.frameCount() - 1 );
+
+  lastFrame.writeToFile("myFloodFill.png");
+  animation.write("myFloodFill.gif");
 
   return 0;
 }
