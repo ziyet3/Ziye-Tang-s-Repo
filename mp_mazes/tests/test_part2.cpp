@@ -1,5 +1,5 @@
 
-/**
+
 #include "../cs225/catch/catch.hpp"
 #include <iostream>
 #include <fstream>
@@ -191,14 +191,16 @@ TEST_CASE("testMakeMazeRandom", "[weight=10][part2]")
 	{
 		for (int x = 0; x < 50; x++)
 		{
-			if (maze1.canTravel(x, y, 0) != maze2.canTravel(x, y, 0)){
-        same = false;
+			if (maze1.canTravel(x, y, 0) != maze2.canTravel(x, y, 0))
+			{
+        		same = false;
 				break;
-      }
-			if (maze1.canTravel(x, y, 1) != maze2.canTravel(x, y, 1)){
-        same = false;
+      		}
+			if (maze1.canTravel(x, y, 1) != maze2.canTravel(x, y, 1))
+			{
+        		same = false;
 				break;
-      }
+      		}
 		}
 	}
 	if(same == false){
@@ -351,5 +353,5 @@ TEST_CASE("testDrawSolutionLarge", "[weight=10][part2][timeout=30000]")
 	REQUIRE(*actualOutput == solnImage);
 	delete actualOutput;
 }
- */
+
 

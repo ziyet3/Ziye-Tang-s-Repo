@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <time.h>
 #include "dsets.h"
 
 using std::cout;
@@ -34,6 +35,14 @@ int main()
 
     cout << s.find(50) << endl;
     cout << "Disjoint Sets test complete" << endl;
-
-    return 0;
+    
+    /*int a,b;
+    srand(time(0));
+    for(int i=0;i<20;i++)
+    {
+        a=rand()%2;
+        b=rand()%2;
+        cout<<a<<" "<<b<<endl;
+    }
+    return 0;*/
 }
