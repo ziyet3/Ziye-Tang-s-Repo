@@ -10,7 +10,6 @@ using namespace cs225;
 class SquareMaze
 {
     public:
-
         struct Grid
         {
             bool rightW;
@@ -35,4 +34,5 @@ class SquareMaze
         vector<vector<Grid>> maze;
 
         void randomlyRemoveWall(int width, int height);
+        bool isolated(int x, int y);
 };

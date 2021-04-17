@@ -182,7 +182,6 @@ TEST_CASE("testMakeMazeRandom", "[weight=10][part2]")
 {
 	SquareMaze maze1;
 	maze1.makeMaze(50, 50);
-	
 	SquareMaze maze2;
 	maze2.makeMaze(50, 50);
 	bool same = true;
@@ -202,12 +201,14 @@ TEST_CASE("testMakeMazeRandom", "[weight=10][part2]")
 				break;
       		}
 		}
+		if(!same)
+			break;
 	}
-	if(same == false){
-		SUCCEED();
+	if(same){
+		FAIL("Generated the same 50x50 maze twice");
 	}
 	else
-		FAIL("Generated the same 50x50 maze twice");
+		SUCCEED();		
 }
 
 TEST_CASE("testSolveMazeValidPath", "[weight=10][part2]")
