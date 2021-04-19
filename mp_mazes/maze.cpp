@@ -308,10 +308,12 @@ PNG* SquareMaze::drawMazeWithSolution()
             }
         }
     }
-
+    mazeSoln->getPixel(curx,cury).s=1;
+    mazeSoln->getPixel(curx,cury).l=0.5;
     for(int k=1;k<=9;k++)
     {
         mazeSoln->getPixel(targx*10+k,(targy+1)*10).l=1;
+        mazeSoln->getPixel(targx*10+k,(targy+1)*10).s=1;
     }
     return mazeSoln;
 }
