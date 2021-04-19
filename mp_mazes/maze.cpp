@@ -121,7 +121,7 @@ vector<int> SquareMaze::solveMaze()
     int width=maze[0].size();
 
     vector<int> winning_path;
-    /*queue<int> toVisit;
+    queue<int> toVisit;
     vector<vector<bool>> visited;
     vector<vector<int>> dist;
 
@@ -170,19 +170,45 @@ vector<int> SquareMaze::solveMaze()
         }
     }
 
-    maxX=0;    
+    int maxX=0;    
     for(int x=0;x<width;x++)
     {
-        if(dist[maxX][height-1]<dist[x][height-1])
+        if(dist[height-1][maxX]<dist[height-1][x])
             maxX=x;
     }
 
-    int btX=maxX;
-    int btY=height-1;
-    while(btX!=0 || btY!=0)
+    int btx=maxX;
+    int bty=height-1;
+    stack<int> s;
+    while(btx!=0 || bty!=0)
     {
+        if(canTravel(btx,bty,0) && dist[bty][btx+1]<dist[bty][btx])
+        {
+            btx=btx+1;
+            s.push(2);
+        }
+        else if(canTravel(btx,bty,1) && dist[bty+1][btx]<dist[bty][btx])
+        {
+            bty=bty+1;
+            s.push(3);
+        }
+        else if(canTravel(btx,bty,2) && dist[bty][btx-1]<dist[bty][btx])
+        {
+            btx=btx-1;
+            s.push(0);
+        }
+        else if(canTravel(btx,bty,3) && dist[bty-1][btx]<dist[bty][btx])
+        {
+            bty=bty-1;
+            s.push(1);
+        }
+    }
 
-    }*/
+    while(s.size()!=0)
+    {
+        winning_path.push_back(s.top());
+        s.pop();
+    }
     return winning_path;
 }
 
@@ -228,6 +254,64 @@ PNG* SquareMaze::drawMaze() const
 
 PNG* SquareMaze::drawMazeWithSolution()
 {
-    PNG* toReturn = new PNG();
-    return toReturn;
+    PNG* mazeSoln = drawMaze();
+    vector<int> soln=solveMaze();
+    unsigned int curx=5;
+    unsigned int cury=5;
+    int targx=0;
+    int targy=0;
+    unsigned int bound;
+    for(auto it=soln.begin();it!=soln.end();it++)
+    {
+        if(*it==0)
+        {
+            bound=curx+10;
+            targx=targx+1;
+            while(curx<bound)
+            {
+                mazeSoln->getPixel(curx,cury).s=1;
+                mazeSoln->getPixel(curx,cury).l=0.5;
+                curx=curx+1;
+            }
+        }
+        else if(*it==1)
+        {
+            bound=cury+10;
+            targy=targy+1;
+            while(cury<bound)
+            {
+                mazeSoln->getPixel(curx,cury).s=1;
+                mazeSoln->getPixel(curx,cury).l=0.5;
+                cury=cury+1;
+            }
+        }
+        else if(*it==2)
+        {
+            targx=targx-1;
+            bound=curx-10;
+            while(curx>bound)
+            {
+                mazeSoln->getPixel(curx,cury).s=1;
+                mazeSoln->getPixel(curx,cury).l=0.5;
+                curx=curx-1;
+            }
+        }
+        else if(*it==3)
+        {
+            targy=targy-1;
+            bound=cury-10;
+            while(cury>bound)
+            {
+                mazeSoln->getPixel(curx,cury).s=1;
+                mazeSoln->getPixel(curx,cury).l=0.5;
+                cury=cury-1;
+            }
+        }
+    }
+
+    for(int k=1;k<=9;k++)
+    {
+        mazeSoln->getPixel(targx*10+k,(targy+1)*10).l=1;
+    }
+    return mazeSoln;
 }
