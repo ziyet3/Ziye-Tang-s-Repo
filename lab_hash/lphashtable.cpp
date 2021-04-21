@@ -3,7 +3,7 @@
  * Implementation of the LPHashTable class.
  */
 #include "lphashtable.h"
-
+using namespace std;
 template <class K, class V>
 LPHashTable<K, V>::LPHashTable(size_t tsize)
 {
@@ -79,9 +79,18 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * **Do this check *after* increasing elems (but before inserting)!!**
      * Also, don't forget to mark the cell for probing with should_probe!
      */
-
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    int idx = hashes::hash(key,size);
+    while(should_probe[idx])
+    {
+        idx=(idx+1)%size;
+    }
+    table[idx]=new pair<K,V>(key,value);
+    should_probe[idx]=true;
+    elems++;
+    if(elems>=size*0.7)
+    {
+        resizeTable();
+    }
 }
 
 template <class K, class V>
@@ -90,6 +99,18 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+    elems--;
+    for(int i=0;i<(int)size;i++)
+    {
+        if(should_probe[i]&&table[i]->first==key)
+        {
+            delete table[i];
+            table[i]=NULL;
+            should_probe[i]=false;
+            break;
+        }
+    }
+    
 }
 
 template <class K, class V>
@@ -101,7 +122,13 @@ int LPHashTable<K, V>::findIndex(const K& key) const
      *
      * Be careful in determining when the key is not in the table!
      */
-
+    for(int i=0;i<(int)size;i++)
+    {
+        if(should_probe[i]&&table[i]->first==key)
+        {
+            return i;
+        }
+    }
     return -1;
 }
 
@@ -159,4 +186,32 @@ void LPHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    size_t oldSize=size;
+    size=findPrime(size*2);
+    elems=0;
+    pair<K, V>** tempTable=table;
+    bool* temp_should_probe=should_probe; 
+    table=new pair<K, V>*[size];
+    should_probe = new bool[size];
+    for (size_t i = 0; i < size; i++) {
+        table[i] = NULL;
+        should_probe[i] = false;
+    }
+    for(int i=0; i<(int)oldSize; i++)
+    {
+        if(temp_should_probe[i])
+        {
+            insert(tempTable[i]->first,tempTable[i]->second);
+        }
+    }
+    for(int i=0; i<(int)oldSize; i++)
+    {        
+        if(temp_should_probe[i])
+        {
+            delete tempTable[i];
+            tempTable[i]=NULL;
+        }
+    }
+    delete[] tempTable;
+    delete[] temp_should_probe;
 }

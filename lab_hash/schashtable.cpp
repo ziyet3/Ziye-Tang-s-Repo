@@ -2,9 +2,10 @@
  * @file schashtable.cpp
  * Implementation of the SCHashTable class.
  */
-
+#include <iostream>
 #include "schashtable.h"
- 
+using namespace std;
+
 template <class K, class V>
 SCHashTable<K, V>::SCHashTable(size_t tsize)
 {
@@ -54,6 +55,14 @@ void SCHashTable<K, V>::insert(K const& key, V const& value)
      * @todo Implement this function.
      *
      */
+    int idx = hashes::hash(key, size);
+    elems++;
+    pair<K,V> p(key,value);
+    table[idx].push_back(p);
+    if(elems>=size*0.7)
+    {
+        resizeTable();
+    }
 }
 
 template <class K, class V>
@@ -66,7 +75,16 @@ void SCHashTable<K, V>::remove(K const& key)
      * Please read the note in the lab spec about list iterators and the
      * erase() function on std::list!
      */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
+    int idx = hashes::hash(key, size);
+    for(it=table[idx].begin();it!=table[idx].end();++it)
+    {
+        if(it->first==key)
+        {
+            table[idx].erase(it);
+            break;
+        }            
+    }
+    elems--;
 }
 
 template <class K, class V>
@@ -76,7 +94,12 @@ V SCHashTable<K, V>::find(K const& key) const
     /**
      * @todo: Implement this function.
      */
-
+    int idx = hashes::hash(key, size);
+    for(auto it=table[idx].begin();it!=table[idx].end();++it)
+    {
+        if(it->first==key)
+            return it->second;
+    }
     return V();
 }
 
@@ -125,7 +148,7 @@ void SCHashTable<K, V>::clear()
 template <class K, class V>
 void SCHashTable<K, V>::resizeTable()
 {
-    typename std::list<std::pair<K, V>>::iterator it;
+    
     /**
      * @todo Implement this function.
      *
@@ -134,4 +157,20 @@ void SCHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    size_t oldSize=size;
+    size=findPrime(size*2);
+    elems=0;
+    list<pair<K, V>>* temp=table;
+    table=new list<pair<K, V>>[size];
+    for(int i=0; i<(int)oldSize; i++)
+    {
+        if(temp[i].size()!=0)
+        {
+            for(auto it=temp[i].begin();it!=temp[i].end();it++)
+            {
+                insert(it->first,it->second);
+            }
+        }
+    }
+    delete[] temp;
 }

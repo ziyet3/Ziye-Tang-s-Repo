@@ -4,7 +4,7 @@
  */
 
 #include "dhhashtable.h"
-
+using namespace std;
 template <class K, class V>
 DHHashTable<K, V>::DHHashTable(size_t tsize)
 {
@@ -80,9 +80,31 @@ void DHHashTable<K, V>::insert(K const& key, V const& value)
      *  0.7). **Do this check *after* increasing elems!!** Also, don't
      *  forget to mark the cell for probing with should_probe!
      */
-
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    int h1=hashes::hash(key,size);
+    int h2=hashes::secondary_hash(key,size);
+    if(!should_probe[h1])
+    {
+        table[h1]=new pair<K,V>(key,value);
+        should_probe[h1]=true;
+        elems++;
+    }
+    else
+    {
+        int i=1;
+        int idx=(h1+i*h2)%size;
+        while(should_probe[idx])
+        {
+            i++;
+            idx=(h1+i*h2)%size;
+        }
+        table[idx]=new pair<K,V>(key,value);
+        should_probe[idx]=true;
+        elems++;
+    }
+    if(elems>=size*0.7)
+    {
+        resizeTable();
+    }
 }
 
 template <class K, class V>
@@ -91,6 +113,17 @@ void DHHashTable<K, V>::remove(K const& key)
     /**
      * @todo Implement this function
      */
+    elems--;
+    for(int i=0;i<(int)size;i++)
+    {
+        if(should_probe[i]&&table[i]->first==key)
+        {
+            delete table[i];
+            table[i]=NULL;
+            should_probe[i]=false;
+            break;
+        }
+    }
 }
 
 template <class K, class V>
@@ -99,6 +132,13 @@ int DHHashTable<K, V>::findIndex(const K& key) const
     /**
      * @todo Implement this function
      */
+    for(int i=0;i<(int)size;i++)
+    {
+        if(should_probe[i]&&table[i]->first==key)
+        {
+            return i;
+        }
+    }
     return -1;
 }
 
