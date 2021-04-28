@@ -14,7 +14,7 @@
 #include <iostream>
 #include <cstring>
 #include <algorithm>
-
+#include <boost/algorithm/string.hpp>
 using std::string;
 using std::map;
 using std::vector;
@@ -22,6 +22,8 @@ using std::ifstream;
 using std::istream;
 using std::istream_iterator;
 using std::stringstream;
+using std::cout;
+using std::endl;
 
 /**
  * Constructs a PronounceDict from a CMU pronunciation dictionary
@@ -75,5 +77,15 @@ PronounceDict::PronounceDict(const map<string, vector<string>>& pronun_dict)
 bool PronounceDict::homophones(const string& word1, const string& word2) const
 {
     /* Your code goes here! */
-    return true;
+    string w1=word1;
+    string w2=word2;
+    boost::to_upper(w1);
+    boost::to_upper(w2);
+    if (dict.find(w1)!=dict.end() && dict.find(w2)!=dict.end())
+    {
+        vector<string> pron1 = dict.find(w1)->second;
+        vector<string> pron2 = dict.find(w2)->second;
+        return pron1==pron2;
+    }   
+    return false;
 }

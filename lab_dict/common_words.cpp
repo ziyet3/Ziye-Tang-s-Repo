@@ -48,12 +48,31 @@ void CommonWords::init_file_word_maps(const vector<string>& filenames)
         // file
         vector<string> words = file_to_vector(filenames[i]);
         /* Your code goes here! */
+        map<string, unsigned int> word_map;
+        for(auto it=words.begin(); it!=words.end(); it++)
+        {
+            if(word_map.find(*it)!=word_map.end())
+                word_map[*it]++;
+            else
+                word_map[*it]=1;
+        }
+        file_word_maps[i]=word_map;
     }
 }
 
 void CommonWords::init_common()
 {
     /* Your code goes here! */
+    for(auto it=file_word_maps.begin(); it!=file_word_maps.end(); it++)
+    {
+        for (std::pair<const string, unsigned int> & key_val : *it)
+        {
+            if(common.find(key_val.first) != common.end())
+                common[key_val.first]++;
+            else
+                common[key_val.first]=1;
+        }
+    }
 }
 
 /**
@@ -65,6 +84,35 @@ vector<string> CommonWords::get_common_words(unsigned int n) const
 {
     vector<string> out;
     /* Your code goes here! */
+    vector<string> appear_all;
+    for (auto it = common.begin(); it != common.end(); it++)
+    {
+        if(it->second==(unsigned int)(file_word_maps.size()))
+            appear_all.push_back(it->first);
+    }
+
+    for(auto it=appear_all.begin(); it!=appear_all.end(); it++)
+    {
+        bool flag=true;
+        for(auto it2=file_word_maps.begin(); it2!=file_word_maps.end(); it2++)
+        {
+            map<string, unsigned int> currentMap=*it2;
+            if(currentMap[*it]<n)
+            {
+                flag=false;
+                break;
+            }
+        }
+        if(flag)
+            out.push_back(*it);
+    }
+
+    vector<string> for_test;
+    for (auto it = common.begin(); it != common.end(); it++)
+    {
+        for_test.push_back(it->first);
+    }
+
     return out;
 }
 

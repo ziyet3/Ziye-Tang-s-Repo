@@ -14,7 +14,7 @@
 using std::string;
 using std::vector;
 using std::ifstream;
-
+using std::sort;
 /**
  * Constructs an AnagramDict from a filename with newline-separated
  * words.
@@ -23,6 +23,18 @@ using std::ifstream;
 AnagramDict::AnagramDict(const string& filename)
 {
     /* Your code goes here! */
+    ifstream wordsFile(filename);
+    string word;
+    if (wordsFile.is_open()) 
+    {
+        /* Reads a line from `wordsFile` into `word` until the file ends. */
+        while (getline(wordsFile, word)) 
+        {
+            string sorted=word;
+            std::sort(sorted.begin(), sorted.end());
+            dict[sorted].push_back(word);
+        }
+    }
 }
 
 /**
@@ -32,6 +44,12 @@ AnagramDict::AnagramDict(const string& filename)
 AnagramDict::AnagramDict(const vector<string>& words)
 {
     /* Your code goes here! */
+    for(auto word=words.begin(); word!=words.end(); word++)
+    {
+        string sorted = *word;
+        std::sort(sorted.begin(), sorted.end());
+        dict[sorted].push_back(*word);
+    }
 }
 
 /**
@@ -43,6 +61,22 @@ AnagramDict::AnagramDict(const vector<string>& words)
 vector<string> AnagramDict::get_anagrams(const string& word) const
 {
     /* Your code goes here! */
+    vector<string> ret;
+    string sorted=word;
+    sort(sorted.begin(), sorted.end());
+    if(dict.find(sorted)!=dict.end())
+    {
+        ret=dict.find(sorted)->second;
+        /*for(auto it=ret.begin(); it!=ret.end(); it++)
+        {
+            if(*it==word)
+            {
+                ret.erase(it);
+                break;
+            }
+        }*/
+        return ret;
+    }
     return vector<string>();
 }
 
@@ -55,5 +89,23 @@ vector<string> AnagramDict::get_anagrams(const string& word) const
 vector<vector<string>> AnagramDict::get_all_anagrams() const
 {
     /* Your code goes here! */
-    return vector<vector<string>>();
+    vector<vector<string>> ret;
+    for (auto it = dict.begin(); it != dict.end(); it++)
+    {
+        if(it->second.size()>1)
+        {
+            ret.push_back(it->second);
+        }
+    }
+    return ret;
+}
+
+
+bool AnagramDict::areAnagrams(const string word1, const string word2)
+{
+    string sorted1=word1;
+    sort(sorted1.begin(),sorted1.end());
+    string sorted2=word2;
+    sort(sorted2.begin(),sorted2.end());
+    return sorted1==sorted2;
 }
