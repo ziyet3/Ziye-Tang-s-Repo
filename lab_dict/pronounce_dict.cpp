@@ -14,7 +14,7 @@
 #include <iostream>
 #include <cstring>
 #include <algorithm>
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 using std::string;
 using std::map;
 using std::vector;
@@ -66,6 +66,8 @@ PronounceDict::PronounceDict(const map<string, vector<string>>& pronun_dict)
     /* Nothing to see here. */
 }
 
+
+
 /**
  * Uses the dictionary to determine if the two words are homophones.
  * @param word1 First word to be tested.
@@ -79,8 +81,8 @@ bool PronounceDict::homophones(const string& word1, const string& word2) const
     /* Your code goes here! */
     string w1=word1;
     string w2=word2;
-    boost::to_upper(w1);
-    boost::to_upper(w2);
+    transform(w1.begin(),w1.end(),w1.begin(),::toupper);
+    transform(w2.begin(),w2.end(),w2.begin(),::toupper);
     if (dict.find(w1)!=dict.end() && dict.find(w2)!=dict.end())
     {
         vector<string> pron1 = dict.find(w1)->second;
@@ -89,3 +91,4 @@ bool PronounceDict::homophones(const string& word1, const string& word2) const
     }   
     return false;
 }
+
